@@ -1,17 +1,40 @@
 package com.animal.hospital;
 
-public class Pet {
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
+public class Pet implements Boardable{
 	private String name;
 	private String ownerName;
 	private String color;
 	private String ownerEmail;
+	
+	private Calendar boardStart;
+	private Calendar boardEnd;
+	
+	/*
+	 *	1: male
+	 *	2: female
+	 *	-1: neutered
+	 *	-2: spayed 
+	 *	
+	 *	0: hermaphrodite (or alien gender of no earthly definition)
+	 */
 	protected int gender;
+	
+	
 	
 	public Pet(String name, String ownerName, String ownerEmail, String color) {
 		this.name = name;
 		this.ownerName = ownerName;
 		this.ownerEmail = ownerEmail;
 		this.color = color;
+		
+		this.gender = 0;
+		this.boardStart = new GregorianCalendar();
+		this.boardEnd = new GregorianCalendar();
+
+		
 	}
 
 	public int getGender() {
@@ -42,6 +65,24 @@ public class Pet {
 	public String toString() {
 		return "Pet [name=" + name + ", ownerName=" + ownerName + ", color=" + color + ", ownerEmail=" + ownerEmail
 				+ ", gender=" + gender + "]";
+	}
+
+	@Override
+	public void setBoardStart(int month, int day, int year) {
+		boardStart.set(year, month, day);
+	}
+
+	@Override
+	public void setBoardEnd(int month, int day, int year) {
+		boardEnd.set(year, month, day);
+	}
+
+	@Override
+	public boolean boarding(int month, int day, int year) {
+		Calendar today = new GregorianCalendar();
+		today.set(year, month, day);
+		
+		return today.compareTo(boardStart) > 0 && today.compareTo(boardEnd) < 0;
 	}
 	
 
