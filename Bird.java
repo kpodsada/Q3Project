@@ -4,7 +4,7 @@ public class Bird extends Pet{
 
 	private boolean featherClipped;
 	
-	public Bird(String name, String ownerName, String ownerEmail, String color){
+	public Bird(String name, String ownerName, String ownerEmail, String color) throws IllegalEmailException, IllegalDateException{
 		super(name, ownerName, ownerEmail, color);
 	}
 	

@@ -11,7 +11,6 @@ public class Pet implements Boardable{
 	
 	private Calendar boardStart;
 	private Calendar boardEnd;
-	
 	/*
 	 *	1: male
 	 *	2: female
@@ -21,20 +20,17 @@ public class Pet implements Boardable{
 	 *	0: hermaphrodite (or alien gender of no earthly definition)
 	 */
 	protected int gender;
-	
-	
-	
-	public Pet(String name, String ownerName, String ownerEmail, String color) {
+
+	public Pet(String name, String ownerName, String ownerEmail, String color) throws IllegalDateException, IllegalEmailException {
+		if(!ownerEmail.matches("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$")) throw new IllegalEmailException();
+
 		this.name = name;
 		this.ownerName = ownerName;
 		this.ownerEmail = ownerEmail;
 		this.color = color;
-		
 		this.gender = 0;
 		this.boardStart = new GregorianCalendar();
 		this.boardEnd = new GregorianCalendar();
-
-		
 	}
 
 	public int getGender() {
@@ -68,7 +64,8 @@ public class Pet implements Boardable{
 	}
 
 	@Override
-	public void setBoardStart(int month, int day, int year) {
+	public void setBoardStart(int month, int day, int year) throws IllegalDateException {
+		if(year > 2017 || year < 2006) throw new IllegalDateException();
 		boardStart.set(year, month, day);
 	}
 

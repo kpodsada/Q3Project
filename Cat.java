@@ -3,7 +3,7 @@ package com.animal.hospital;
 public class Cat extends Pet{
 	private String hairLength;
 	
-	public Cat(String name, String ownerName, String ownerEmail, String color, String hairLength) {
+	public Cat(String name, String ownerName, String ownerEmail, String color, String hairLength) throws IllegalEmailException, IllegalDateException{
 		super(name, ownerName, ownerEmail, color);
 		this.hairLength = hairLength;
 	}
