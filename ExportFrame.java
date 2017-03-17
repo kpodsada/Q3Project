@@ -5,6 +5,8 @@ import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -40,8 +42,16 @@ public class ExportFrame extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				//consume input
-				text.setText(null);
+				String path = text.getText();
+				try {
+					AnimalHospitalFrame.hospital.writeFile(path);
+				} catch (FileNotFoundException e) {
+					ErrorFrame error = new ErrorFrame("You messed up the file path");
+					error.setVisible(true);
+				} catch (IOException e) {
+					ErrorFrame error = new ErrorFrame("You did something atrocious, probably");
+					error.setVisible(true);
+				}
 				close();
 			}
 			
@@ -54,8 +64,16 @@ public class ExportFrame extends JFrame{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//consume input
-				text.setText(null);
+				String path = text.getText();
+				try {
+					AnimalHospitalFrame.hospital.writeFile(path);
+				} catch (FileNotFoundException e1) {
+					ErrorFrame error = new ErrorFrame("You messed up the file path");
+					error.setVisible(true);
+				} catch (IOException e2) {
+					ErrorFrame error = new ErrorFrame("You did something atrocious, probably");
+					error.setVisible(true);
+				}
 				close();
 			}
 			

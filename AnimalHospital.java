@@ -18,59 +18,96 @@ public class AnimalHospital {
 	}
 
 	public void readFile(String inputFile) throws FileNotFoundException, IOException{
-		BufferedReader in = new BufferedReader(new FileReader(inputFile));
-		
-		
-		while(!in.readLine().equals("END")) {
-			String type = in.readLine();
-			String petName = in.readLine();
-			String ownerName = in.readLine();
-			String ownerEmail = in.readLine();
-			String petColor = in.readLine();
-			String gender = in.readLine();
-			int g = 0;
-			
-			switch(gender) {
-				case "female" : g = 2;
-				break;
-				case "male" : g = 1;
-				break;
-				case "spayed" : g = -2;
-				break;
-				case "neutered" : g = -1;
-				break;	
-			}
-			
-			try {
-				switch(type) {
-				case "DOG" : Dog dog = new Dog(petName, ownerName, ownerEmail, petColor, in.readLine());
-					dog.setGender(g);
-					pets.add(dog);
-				break;
-				case "CAT" : Cat cat = new Cat(petName, ownerName, ownerEmail, petColor, in.readLine());
-					cat.setGender(g);
-					pets.add(cat);
-				break;
-				case "BIRD" : Bird bird = new Bird(petName, ownerName, ownerEmail, petColor);
-					bird.setGender(g);
-					pets.add(bird);
-				break;
+		pets.clear();
+		try (BufferedReader in = new BufferedReader(new FileReader(inputFile))){
+			while(!in.readLine().equals("END")) {
+				String type = in.readLine();
+				String petName = in.readLine();
+				String ownerName = in.readLine();
+				String ownerEmail = in.readLine();
+				String petColor = in.readLine();
+				String gender = in.readLine();
+				
+				//quick and dirty fix
+				if (gender == null){
+					break;
+				}
+
+				int g = 0;
+				
+				switch(gender) {
+					case "female" : g = 2;
+					break;
+					case "male" : g = 1;
+					break;
+					case "spayed" : g = -2;
+					break;
+					case "neutered" : g = -1;
+					break;	
+				}
+				
+				try {
+					switch(type) {
+						case "DOG" : Dog dog = new Dog(petName, ownerName, ownerEmail, petColor, in.readLine());
+							dog.setGender(g);
+							pets.add(dog);
+							break;
+						case "CAT" : Cat cat = new Cat(petName, ownerName, ownerEmail, petColor, in.readLine());
+							cat.setGender(g);
+							pets.add(cat);
+							break;
+						case "BIRD" : Bird bird = new Bird(petName, ownerName, ownerEmail, petColor);
+							bird.setGender(g);
+							pets.add(bird);
+							break;
+					}
+				}
+				catch(IllegalDateException e) {
+					ErrorFrame error = new ErrorFrame("You messed up the dates in your file");
+					error.setVisible(true);
+				}
+				catch(IllegalEmailException e) {
+					ErrorFrame error = new ErrorFrame("You messed up the emails in your file");
+					error.setVisible(true);
 				}
 			}
-			catch(IllegalDateException e) {
-				ErrorFrame error = new ErrorFrame("You messed up the dates in your file");
-				error.setVisible(true);
-			}
-			catch(IllegalEmailException e) {
-				ErrorFrame error = new ErrorFrame("You messed up the emails in your file");
-				error.setVisible(true);
-			}
 		}
-		in.close();
+		
 	}
 	
 	public void writeFile(String path) throws FileNotFoundException, IOException{
-		BufferedWriter out = new BufferedWriter(new FileWriter(path));
+		try (BufferedWriter out = new BufferedWriter(new FileWriter(path))){
+			for(Pet rufus : pets){
+				out.write(rufus.getClass().getSimpleName().toUpperCase() + "\n");
+				out.write(rufus.getPetName() + "\n");
+				out.write(rufus.getOwnerName() + "\n");
+				out.write(rufus.getOwnerEmail() + "\n");
+				out.write(rufus.getColor() + "\n");
+				switch (rufus.getGender()){
+					case 1 : out.write("male\n"); break;
+					case 2 : out.write("female\n"); break;
+					case -1 : out.write("neutered\n"); break;
+					case -2 : out.write("spayed\n"); break;
+					
+					default : out.write("hermaphrodite");
+				}
+				
+				if (rufus instanceof Dog){
+					out.write(((Dog)rufus).getSize() + "\n");
+				} else if (rufus instanceof Cat){
+					out.write(((Cat)rufus).getHairLength() + "\n");
+				} else if (rufus instanceof Bird){
+					out.write(((Bird)rufus).clipped() + "\n");
+				}
+				
+				if(pets.indexOf(rufus) != pets.size() - 1){
+					out.write("\n");
+				}
+			}
+			
+			out.write("END");
+		}
+		
 	}
 
 	public ArrayList<Pet> getPets() {
