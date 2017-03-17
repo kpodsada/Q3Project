@@ -4,7 +4,9 @@ import java.io.IOException;
 
 public class PetTester {
 	public static void main(String[] args) throws IOException {
-		AnimalHospital hospital = new AnimalHospital("petData.txt");
-		hospital.printCurrentBoarding();
+		AnimalHospital vet = new AnimalHospital();
+		
+		AnimalHospitalFrame frame = new AnimalHospitalFrame(vet);
+		frame.start();
 	}
 }

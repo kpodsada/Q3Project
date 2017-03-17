@@ -1,7 +1,10 @@
 package com.animal.hospital;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -9,11 +12,12 @@ import java.util.GregorianCalendar;
 
 public class AnimalHospital {
 	private ArrayList<Pet> pets;
+	
+	public AnimalHospital() {
+		pets = new ArrayList<>();	
+	}
 
-	
-	public AnimalHospital(String inputFile) throws IOException {
-		pets = new ArrayList<>();
-	
+	public void readFile(String inputFile) throws FileNotFoundException, IOException{
 		BufferedReader in = new BufferedReader(new FileReader(inputFile));
 		
 		
@@ -54,13 +58,19 @@ public class AnimalHospital {
 				}
 			}
 			catch(IllegalDateException e) {
-				e.getMessage();
+				ErrorFrame error = new ErrorFrame("You messed up the dates in your file");
+				error.setVisible(true);
 			}
 			catch(IllegalEmailException e) {
-				e.getMessage();
+				ErrorFrame error = new ErrorFrame("You messed up the emails in your file");
+				error.setVisible(true);
 			}
 		}
 		in.close();
+	}
+	
+	public void writeFile(String path) throws FileNotFoundException, IOException{
+		BufferedWriter out = new BufferedWriter(new FileWriter(path));
 	}
 
 	public ArrayList<Pet> getPets() {
@@ -73,6 +83,16 @@ public class AnimalHospital {
 				System.out.println(p.toString());
 			}
 		}	
+	}
+	
+	public Pet getPetInfoByName(String name) {
+		for(Pet p : pets) {
+			if(name.equals(p.getPetName())) {
+				return p;
+			}
+		}
+		
+		return null;
 	}
 	
 	public void printPetInfoByOwner(String ownerName) {
@@ -94,6 +114,43 @@ public class AnimalHospital {
 			if(p.boarding(Calendar.MONTH, Calendar.DAY_OF_MONTH, Calendar.YEAR)) System.out.println(p.toString());
 		}
 		
+	}
+	
+	public void addPet(Pet pet){
+		pets.add(pet);
+	}
+	
+	public String formattedOutput(){
+		String output = "PETS IN THE ANIMAL HOSPITAL:\n"
+						+"(^_^)-------------------(^_^)\n";
+		
+		for (Pet pet : pets){
+			output += "Type: " + pet.getClass().getSimpleName() + "\n";
+			output += "Owner: " + pet.getOwnerName() + "\n";
+			output += "Email: " + pet.getOwnerEmail() + "\n";
+			output += "Color: " + pet.getColor() + "\n";
+			output += "Gender: ";
+			switch(pet.getGender()){
+				case 1: output += "male"; break;
+				case 2: output += "female"; break;
+				case -1: output += "neutered"; break;
+				case -2: output += "spayed"; break;
+				
+				default: output += "hermaphrodite";
+			} output += "\n";
+			
+			if (pet instanceof Dog){
+				output += "Size: " + ((Dog)pet).getSize() + "\n";
+			} else if (pet instanceof Cat){
+				output += "Hair: " + ((Cat)pet).getHairLength() + "\n";
+			} else if (pet instanceof Bird){
+				output += "Feathers clipped: " + ((Bird)pet).clipped() + "\n";
+			}
+			
+			output += "\n";			
+		}
+		
+		return output;
 	}
 		
 }

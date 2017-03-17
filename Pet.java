@@ -22,7 +22,7 @@ public class Pet implements Boardable{
 	protected int gender;
 
 	public Pet(String name, String ownerName, String ownerEmail, String color) throws IllegalDateException, IllegalEmailException {
-		if(!ownerEmail.matches("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$")) throw new IllegalEmailException();
+		if(!ownerEmail.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$")) throw new IllegalEmailException();
 
 		this.name = name;
 		this.ownerName = ownerName;
